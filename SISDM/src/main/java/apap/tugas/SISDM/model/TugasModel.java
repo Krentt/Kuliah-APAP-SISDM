@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -42,7 +44,8 @@ public class TugasModel {
     @Column(name = "status")
     private String status;
 
-    @ManyToOne
-    @JoinColumn(name = "id_presensi")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "id_presensi", referencedColumnName = "idPresensi")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private PresensiModel presensi;
 }

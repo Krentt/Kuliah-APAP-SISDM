@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Sistem Informasi Sumber Daya Manusia</title>
+  <object th:include="fragments/navbar :: css" th:remove="tag"></object>
+  <object th:include="fragments/navbar :: js" th:remove="tag"></object>
+</head>
+<body>
+<!--Bootstrap Navbar-->
+<nav th:replace="fragments/navbar :: navbar(${'presensi'})"></nav>
+<!--End of navbar-->
+
+<!--Start of contents-->
+<br>
+<h1 class="text-center" style="font-family: 'Comic Sans MS'">Daftar Presensi</h1>
+<br>
+<div class="card w-50 mx-auto">
+  <div class="card-header" style="background-color: #36c5f1">
+    <ul class="list-inline my-auto">
+      <li class="list-inline-item py-2">
+        <h5 class="text-white">Data Presensi</h5>
+      </li>
+      <li class="list-inline-item float-right">
+        <a th:href="@{/karyawan/tambah}" type="button" class="btn btn-outline-light">+ Tambah Presensi</a>
+      </li>
+    </ul>
+  </div>
+  <div class="card-body">
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th class="text-center">No</th>
+        <th class="text-center">Nama</th>
+        <th class="text-center">Tanggal</th>
+        <th class="text-center">Status</th>
+        <th class="text-center">Action</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="presensi, iterationStatus: ${listPresensi}">
+        <td th:text="${iterationStatus.count}" class="text-center"></td>
+        <td th:text="${presensi.karyawan.a_namaDepanKaryawan} + ' ' + ${presensi.karyawan.b_namaBelakangKaryawan}" class="text-center"></td>
+        <td th:text="${#temporals.format(presensi.tanggal, 'dd MMMM yyyy')}" class="text-center"></td>
+        <td th:if="${presensi.status} == 1" class="text-center text-success"><b>TEPAT WAKTU</b></td>
+        <td th:unless="${presensi.status} == 1" class="text-center text-danger"><b>TERLAMBAT</b></td>
+        <td class="text-center">
+          <button class="btn btn-success">Detail</button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Sistem Informasi Sumber Daya Manusia</title>
+  <object th:include="fragments/navbar :: css" th:remove="tag"></object>
+  <object th:include="fragments/navbar :: js" th:remove="tag"></object>
+</head>
+<body>
+<!--Bootstrap Navbar-->
+<nav th:replace="fragments/navbar :: navbar(${'karyawan'})"></nav>
+<br><br>
+
+<div class="container">
+  <h1 style="font-family: 'Comic Sans MS'">Tambah Karyawan</h1>
+    <br>
+<!--    Starting Form-->
+    <form th:action="@{/karyawan/tambah}" th:object="${karyawan}" method="POST">
+        <label for="nama" style="font-family: 'Arial'"><b>Nama Karyawan</b></label>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <input type="text" class="form-control" id="nama" placeholder="Nama Depan" th:field="*{a_namaDepanKaryawan}" required>
+            </div>
+            <div class="form-group col-md-6">
+                <input type="text" class="form-control" id="namaBelakang" placeholder="Nama Belakang" th:field="*{b_namaBelakangKaryawan}" required>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputEmail4" style="font-family: 'Arial'"><b>Email</b></label>
+                <input type="email" class="form-control" id="inputEmail4" placeholder="Email" th:field="*{z_emailKaryawan}" required>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="tanggal-lahir" style="font-family: 'Arial'"><b>Tanggal Lahir</b></label>
+                <input id="tanggal-lahir" class="form-control" type="date" th:field="*{tanggalLahirKaryawan}" required/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="jenis-kelamin" style="font-family: 'Arial'"><b>Jenis Kelamin</b></label>
+            <div class="form-check" id="jenis-kelamin">
+                <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="L" th:field="*{jenisKelaminKaryawan}" checked>
+                <label class="form-check-label" for="gridRadios1">
+                    Laki-laki
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="P" th:field="*{jenisKelaminKaryawan}">
+                <label class="form-check-label" for="gridRadios2">
+                    Perempuan
+                </label>
+            </div>
+        </div>
+        <div class="form-row">
+            <table class="table table-borderless">
+                <thead>
+                    <th style="font-family: Arial">Daftar Sertifikasi</th>
+                </thead>
+                <tbody>
+                    <tr th:each="sertifikat, iterationStatus : *{sertifikatKaryawan}">
+                        <td>
+                            <select name="idSertifikat" th:field="*{sertifikatKaryawan[__${iterationStatus.index}__].id.idSertifikat}" th:value="*{sertifikatKaryawan[__${iterationStatus.index}__].id.idSertifikat}" id="" class="form-control">
+                                <div th:each="sertifikasiEx, iterationStatus2 : ${listSertifikasiExisting}">
+                                    <option th:value="${sertifikasiEx.idSertifikat}" th:text="${sertifikasiEx.namaSertifikat}"></option>
+                                </div>
+                            </select>
+                        </td>
+                        <td><input class="form-control" type="date" th:field="*{sertifikatKaryawan[__${iterationStatus.index}__].c_tanggalPengambilan}"/></td>
+                        <td><button name="deleteRow" th:value="${iterationStatus.index}" type="submit" class="btn btn-danger">HAPUS</button></td>
+                    </tr>
+                    <tr>
+                        <td><button name="addRow"  type="submit" class="form-control btn btn-success">+ Tambah Sertifikasi</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <br><br><br>
+        <button name="save" type="submit" class="btn btn-danger">Simpan</button>
+        <a class="btn btn-secondary" th:href="@{/karyawan}">Batal</a>
+    </form>
+</div>
+
+</body>
+</html>

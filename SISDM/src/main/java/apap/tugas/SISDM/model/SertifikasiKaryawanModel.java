@@ -9,6 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -26,22 +27,22 @@ public class SertifikasiKaryawanModel {
     @ManyToOne
     @MapsId("idKaryawan")
     @JoinColumn(name = "id_karyawan")
-    private KaryawanModel karyawan;
+    private KaryawanModel b_karyawan;
 
     @ManyToOne
     @MapsId("idSertifikat")
     @JoinColumn(name = "id_sertifikat")
-    private SertifikasiModel sertifikat;
+    private SertifikasiModel a_sertifikat;
 
     @NotNull
-    @Column(nullable = false)
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-    private LocalDateTime tanggalPengambilan;
+    @Column(nullable = false, name = "tanggalPengambilan")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate c_tanggalPengambilan;
 
     @NotNull
-    @Size(max = 14)
+    @Size(max = 15)
     @Column(name = "no_sertifikasi")
-    private String noSertifikasi;
+    private String d_noSertifikasi;
 
 
 }

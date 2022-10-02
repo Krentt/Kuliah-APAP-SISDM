@@ -1,10 +1,53 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Sistem Informasi Sumber Daya Manusia</title>
+    <object th:include="fragments/navbar :: css" th:remove="tag"></object>
+    <object th:include="fragments/navbar :: js" th:remove="tag"></object>
 </head>
 <body>
+<!--Bootstrap Navbar-->
+<nav th:replace="fragments/navbar :: navbar(${'karyawan'})"></nav>
+<!--End of navbar-->
 
+<!--Start of contents-->
+<br>
+    <h1 class="text-center" style="font-family: 'Comic Sans MS'">Daftar Karyawan</h1>
+<br>
+    <div class="card w-50 mx-auto">
+        <div class="card-header" style="background-color: #36c5f1">
+            <ul class="list-inline my-auto">
+                <li class="list-inline-item py-2">
+                    <h5 class="text-white">Data Karyawan</h5>
+                </li>
+                <li class="list-inline-item float-right">
+                    <a th:href="@{/karyawan/tambah}" type="button" class="btn btn-outline-light">+ Tambah Karyawan</a>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th class="text-center">No</th>
+                    <th class="text-center">Nama</th>
+                    <th class="text-center">Email</th>
+                    <th class="text-center">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="karyawan, iterationStatus: ${listKaryawan}">
+                    <td th:text="${iterationStatus.count}" class="text-center"></td>
+                    <td th:text="${karyawan.a_namaDepanKaryawan} + ' ' + ${karyawan.b_namaBelakangKaryawan}" class="text-center"></td>
+                    <td th:text="${karyawan.z_emailKaryawan}" class="text-center" </td>
+                    <td class="text-center">
+                        <a class="btn btn-success" th:href="@{/karyawan/} + ${karyawan.idKaryawan}">Detail</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </body>
 </html>

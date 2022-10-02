@@ -28,6 +28,6 @@ public class SertifikasiModel {
     @Column(name = "nama")
     private String namaSertifikat;
 
-    @OneToMany(mappedBy = "sertifikat")
+    @OneToMany(mappedBy = "a_sertifikat", cascade = CascadeType.ALL)
     private List<SertifikasiKaryawanModel> sertifikatKaryawan;
 }
