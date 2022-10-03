@@ -93,8 +93,9 @@ public class KaryawanController {
     }
 
     public String generateId(SertifikasiKaryawanModel sertifikasiKaryawan) {
+        DateTimeFormatter formatterBd = DateTimeFormatter.ofPattern("yyyy");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMM");
-        String tanggalLahir = formatter.format(sertifikasiKaryawan.getB_karyawan().getTanggalLahirKaryawan());
+        String tanggalLahir = formatterBd.format(sertifikasiKaryawan.getB_karyawan().getTanggalLahirKaryawan());
         String tanggalPengambilan = formatter.format(sertifikasiKaryawan.getC_tanggalPengambilan());
         String codeAwal = String.valueOf(Integer.parseInt(tanggalLahir) + Integer.parseInt(tanggalPengambilan));
 
@@ -198,6 +199,8 @@ public class KaryawanController {
                     SertifikasiModel sertifikasi = sertifikasiService.getSertifikasiById(sertifikasiKaryawan.getId().getIdSertifikat());
                     sertifikasiKaryawan.setA_sertifikat(sertifikasi);
                     sertifikasiKaryawan.setD_noSertifikasi(generateId(sertifikasiKaryawan));
+                } else {
+                    sertifikasiKaryawanService.deleteSertifikasiKaryawan(sertifikasiKaryawan.getId());
                 }
             }
         }

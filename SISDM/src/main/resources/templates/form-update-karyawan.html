@@ -64,8 +64,9 @@
             <input type="hidden" th:field="*{sertifikatKaryawan[__${iterationStatus.index}__].a_sertifikat}">
             <input type="hidden" th:field="*{sertifikatKaryawan[__${iterationStatus.index}__].b_karyawan}">
             <input type="hidden" th:field="*{sertifikatKaryawan[__${iterationStatus.index}__].d_noSertifikasi}">
+            <input type="hidden" th:field="*{sertifikatKaryawan[__${iterationStatus.index}__].id.idKaryawan}">
 <!--            <div th:text="*{sertifikatKaryawan[__${iterationStatus.index}__].a_sertifikat}"></div>-->
-            <select name="idSertifikat" th:field="*{sertifikatKaryawan[__${iterationStatus.index}__].id.idSertifikat}" th:value="*{sertifikatKaryawan[__${iterationStatus.index}__].id.idSertifikat}" class="form-control">
+            <select name="idSertifikat" th:field="*{sertifikatKaryawan[__${iterationStatus.index}__].id.idSertifikat}" class="form-control">
               <option th:each="sertifikasiEx : ${listSertifikasiExisting}" th:value="${sertifikasiEx.idSertifikat}" th:text="${sertifikasiEx.namaSertifikat}"></option>
             </select>
           </td>

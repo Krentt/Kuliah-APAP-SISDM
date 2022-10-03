@@ -58,10 +58,8 @@
                 <tbody>
                     <tr th:each="sertifikat, iterationStatus : *{sertifikatKaryawan}">
                         <td>
-                            <select name="idSertifikat" th:field="*{sertifikatKaryawan[__${iterationStatus.index}__].id.idSertifikat}" th:value="*{sertifikatKaryawan[__${iterationStatus.index}__].id.idSertifikat}" id="" class="form-control">
-                                <div th:each="sertifikasiEx, iterationStatus2 : ${listSertifikasiExisting}">
-                                    <option th:value="${sertifikasiEx.idSertifikat}" th:text="${sertifikasiEx.namaSertifikat}"></option>
-                                </div>
+                            <select name="idSertifikat" th:field="*{sertifikatKaryawan[__${iterationStatus.index}__].id.idSertifikat}" class="form-control">
+                                <option th:each="sertifikasiEx : ${listSertifikasiExisting}" th:value="${sertifikasiEx.idSertifikat}" th:text="${sertifikasiEx.namaSertifikat}"></option>
                             </select>
                         </td>
                         <td><input class="form-control" type="date" th:field="*{sertifikatKaryawan[__${iterationStatus.index}__].c_tanggalPengambilan}"/></td>

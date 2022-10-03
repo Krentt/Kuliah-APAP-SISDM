@@ -42,13 +42,13 @@ public class PresensiModel {
 
     @Nullable
     @Column(name = "waktu_masuk")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date a_waktuMasuk;
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    private LocalDateTime u_waktuMasuk;
 
     @Nullable
     @Column(name = "waktu_keluar")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date b_waktuKeluar;
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    private LocalDateTime v_waktuKeluar;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "id_karyawan", referencedColumnName = "idKaryawan", nullable = false)
