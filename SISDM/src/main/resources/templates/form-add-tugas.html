@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Sistem Informasi Sumber Daya Manusia</title>
+  <object th:include="fragments/navbar :: css" th:remove="tag"></object>
+  <object th:include="fragments/navbar :: js" th:remove="tag"></object>
+</head>
+<body>
+<!--Bootstrap Navbar-->
+<nav th:replace="fragments/navbar :: navbar(${'tugas'})"></nav>
+<br><br>
+
+<div class="container">
+  <h1 style="font-family: 'Comic Sans MS'">Tambah Tugas</h1>
+  <br>
+  <!--    Starting Form-->
+  <form th:action="@{/tambah-tugas}" th:object="${tugas}" method="POST">
+    <div class="form-group">
+      <label for="namaKaryawan" style="font-family: 'Arial'"><b>Nama Tugas</b></label>
+      <input type="text" class="form-control" id="namaKaryawan" th:field="${tugas.j_namaTugas}" placeholder="Nama Tugas">
+    </div>
+    <div class="form-group">
+      <label for="tanggal-presensi" style="font-family: 'Arial'"><b>Deskripsi</b></label>
+      <textarea name="" id="tanggal-presensi" cols="30" rows="10" th:field="*{k_deskripsiTugas}" class="form-control" placeholder="Deskripsi Tugas" maxlength="255"></textarea>
+    </div>
+
+    <!--    Daftar Tugas-->
+    <div class="form-row">
+      <table class="table table-borderless">
+        <thead>
+        <th style="font-family: Arial">Story Point</th>
+        <th style="font-family: Arial">Status</th>
+        </thead>
+        <tbody>
+        <tr>
+          <td><input type="text" class="form-control" placeholder="Story Point" th:field="${tugas.l_storyPoint}"></td>
+            <td>
+              <select th:field="${tugas.m_status}" class="form-control">
+                <option th:value="0">Dimulai</option>
+                <option th:value="1">Dikerjakan</option>
+                <option th:value="2">Selesai</option>
+              </select>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <br><br><br>
+    <button name="save" type="submit" class="btn btn-danger">Simpan</button>
+    <a class="btn btn-secondary" th:href="@{/}">Batal</a>
+  </form>
+</div>
+
+<!--Bootstrap script-->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<!--End of script-->
+
+</body>
+</html>

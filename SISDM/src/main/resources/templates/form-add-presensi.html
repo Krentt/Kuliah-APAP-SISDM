@@ -17,8 +17,8 @@
   <!--    Starting Form-->
   <form th:action="@{/presensi/tambah}" th:object="${presensi}" method="POST">
     <label for="namaKaryawan" style="font-family: 'Arial'"><b>Nama Karyawan</b></label>
-    <select name="idSertifikat" id="namaKaryawan" class="form-control">
-      <option th:each="karyawan : ${listKaryawan}" th:value="${karyawan}" th:text="${karyawan.a_namaDepanKaryawan} + ' ' + ${karyawan.b_namaBelakangKaryawan}"></option>
+    <select name="idSertifikat" id="namaKaryawan" class="form-control" th:field="*{karyawan.idKaryawan}">
+      <option th:each="karyawan : ${listKaryawan}" th:value="${karyawan.idKaryawan}" th:text="${karyawan.a_namaDepanKaryawan} + ' ' + ${karyawan.b_namaBelakangKaryawan}"></option>
     </select>
     <br>
     <div class="form-group">
@@ -28,11 +28,11 @@
     <div class="form-row">
       <div class="form-group col-md-6">
         <label for= "waktu-masuk" style="font-family: 'Arial'"><b>Waktu Masuk</b></label>
-        <input type="datetime-local" class="form-control" id="waktu-masuk" placeholder="Email" th:field="*{u_waktuMasuk}" required>
+        <input type="time" class="form-control" id="waktu-masuk" placeholder="Email" th:field="*{u_waktuMasuk}" required>
       </div>
       <div class="form-group col-md-6">
         <label for="waktu-keluar" style="font-family: 'Arial'"><b>Waktu keluar</b></label>
-        <input id="waktu-keluar" class="form-control" type="datetime-local" th:field="*{v_waktuKeluar}" required/>
+        <input id="waktu-keluar" class="form-control" type="time" th:field="*{v_waktuKeluar}" required/>
       </div>
     </div>
 
@@ -40,29 +40,34 @@
     <div class="form-row">
       <table class="table table-borderless">
         <thead>
-        <th style="font-family: Arial">Daftar Tugas</th>
+         <th style="font-family: Arial">Daftar Tugas</th>
         </thead>
         <tbody>
-        <tr th:each="tugas, iterationStatus : *{listTugas}">
-          <td>
-            <select th:field="*{listTugas[__${iterationStatus.index}__].idTugas}" class="form-control">
-              <option th:each="tugasEx : ${listTugasExisting}" th:value="${tugasEx.idTugas}" th:text="${tugasEx.namaTugas}"></option>
-            </select>
-          </td>
-          <td>
-            <select th:field="*{listTugas[__${iterationStatus.index}__].status}" class="form-control">
-              <option value="0">Dimulai</option>
-              <option value="1">Dikerjakan</option>
-              <option value="2">Selesai</option>
-            </select>
-          </td>
-          <td>
-          </td>
-          <td><button name="deleteRow" th:value="${iterationStatus.index}" type="submit" class="btn btn-danger">HAPUS</button></td>
-        </tr>
-        <tr>
-          <td><button name="addRow"  type="submit" class="form-control btn btn-success">+ Tambah Sertifikasi</button></td>
-        </tr>
+        <div th:if="${listTugasExisting.size()} == 0">
+          <td class="text-center text-danger card-body shadow-sm border border-danger"><b>Tidak ada Tugas yang dapat kamu kerjakan!</b></td>
+        </div>
+        <div th:unless="${listTugasExisting.size()} == 0">
+          <tr th:each="tugas, iterationStatus : *{listTugas}">
+            <td>
+              <select th:field="*{listTugas[__${iterationStatus.index}__].idTugas}" class="form-control">
+                <option th:each="tugasEx : ${listTugasExisting}" th:value="${tugasEx.idTugas}" th:text="${tugasEx.j_namaTugas}"></option>
+              </select>
+            </td>
+            <td>
+              <select th:field="*{listTugas[__${iterationStatus.index}__].m_status}" class="form-control">
+                <option th:value="0">Dimulai</option>
+                <option th:value="1">Dikerjakan</option>
+                <option th:value="2">Selesai</option>
+              </select>
+            </td>
+            <td>
+            </td>
+            <td><button name="deleteRow" th:value="${iterationStatus.index}" type="submit" class="btn btn-danger">HAPUS</button></td>
+          </tr>
+          <tr>
+            <td><button name="addRow"  type="submit" class="form-control btn btn-success">+ Tambah Tugas</button></td>
+          </tr>
+        </div>
         </tbody>
       </table>
     </div>
@@ -71,6 +76,12 @@
     <a class="btn btn-secondary" th:href="@{/presensi}">Batal</a>
   </form>
 </div>
+
+<!--Bootstrap script-->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<!--End of script-->
 
 </body>
 </html>

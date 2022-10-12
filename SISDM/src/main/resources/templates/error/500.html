@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <title>500 ERROR</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <object th:include="fragments/navbar :: css" th:remove="tag"></object>
+    <object th:include="fragments/navbar :: js" th:remove="tag"></object>
+</head>
+<body>
+<!--Bootstrap Navbar-->
+<nav th:replace="fragments/navbar :: navbar(${''})"></nav>
+<!--End of Navbar -->
+
+<!--Card Section-->
+<div class="row justify-content-center my-5">
+    <div class="card w-50">
+        <div class="card-header">
+            <h2 class="text-danger">500 ERROR</h2>
+        </div>
+        <div class="card-body">
+            <p class="font-weight-bold">500 ERROR</p>
+            <p>Anda mengalami error! Sesungguhnya error adalah hal yang lumrah dalam suatu program. Hal ini disebabkan
+                oleh pembuat program yang juga manusia. Ingat! bahwa manusia tidak ada yang sempurna. Sekali lagi, saya memohon maaf atas
+                error yang dihasilkan sehingga dapat menghasilkan pengurangan nilai pada Tugas Individu 1 APAP ini. Tapi saya mencoba yang terbaik,
+                dalam waktu yang singkat dan tugas yang banyak ini! ╭∩╮（︶︿︶）╭∩╮</p>
+            <br><br>
+            <a class="btn btn-danger" th:href="@{/}">Beranda</a>
+        </div>
+    </div>
+</div>

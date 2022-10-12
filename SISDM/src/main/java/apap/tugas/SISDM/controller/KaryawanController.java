@@ -1,9 +1,6 @@
 package apap.tugas.SISDM.controller;
 
-import apap.tugas.SISDM.model.KaryawanModel;
-import apap.tugas.SISDM.model.SertifikasiKaryawanKey;
-import apap.tugas.SISDM.model.SertifikasiKaryawanModel;
-import apap.tugas.SISDM.model.SertifikasiModel;
+import apap.tugas.SISDM.model.*;
 import apap.tugas.SISDM.services.KaryawanService;
 import apap.tugas.SISDM.services.SertifikasiKaryawanService;
 import apap.tugas.SISDM.services.SertifikasiService;
@@ -13,9 +10,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityManager;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Controller
@@ -119,24 +116,31 @@ public class KaryawanController {
             @ModelAttribute KaryawanModel karyawan,
             Model model
     ){
-        if(karyawan.getSertifikatKaryawan() == null){
-            karyawan.setSertifikatKaryawan(new ArrayList<>());
-        } else {
-            List<SertifikasiKaryawanModel> sertifikatKaryawan = karyawan.getSertifikatKaryawan();
-            karyawan.setSertifikatKaryawan(new ArrayList<>());
-            karyawanService.addKaryawan(karyawan);
-            for (SertifikasiKaryawanModel sertifikasiKaryawan : sertifikatKaryawan){
-                sertifikasiKaryawan.setB_karyawan(karyawan);
-                SertifikasiModel sertifikasi = sertifikasiService.getSertifikasiById(sertifikasiKaryawan.getId().getIdSertifikat());
-                sertifikasiKaryawan.setA_sertifikat(sertifikasi);
-                sertifikasiKaryawan.setD_noSertifikasi(generateId(sertifikasiKaryawan));
+        try{
+            if(karyawan.getSertifikatKaryawan() == null){
+                karyawan.setSertifikatKaryawan(new ArrayList<>());
+            } else {
+                List<SertifikasiKaryawanModel> sertifikatKaryawan = karyawan.getSertifikatKaryawan();
+                karyawan.setSertifikatKaryawan(new ArrayList<>());
+                karyawanService.addKaryawan(karyawan);
+                for (SertifikasiKaryawanModel sertifikasiKaryawan : sertifikatKaryawan){
+                    sertifikasiKaryawan.setB_karyawan(karyawan);
+                    SertifikasiModel sertifikasi = sertifikasiService.getSertifikasiById(sertifikasiKaryawan.getId().getIdSertifikat());
+                    sertifikasiKaryawan.setA_sertifikat(sertifikasi);
+                    sertifikasiKaryawan.setD_noSertifikasi(generateId(sertifikasiKaryawan));
+                }
+                karyawan.setSertifikatKaryawan(sertifikatKaryawan);
             }
-            karyawan.setSertifikatKaryawan(sertifikatKaryawan);
-        }
-        karyawanService.addKaryawan(karyawan);
-        model.addAttribute("karyawan", karyawan);
+            karyawanService.addKaryawan(karyawan);
+            model.addAttribute("karyawan", karyawan);
 
-        return "add-karyawan";
+            return "add-karyawan";
+        } catch (Exception e){
+            KaryawanModel karyawanBefore = karyawanService.getKaryawanByIdKaryawan(karyawan.getIdKaryawan());
+            karyawanService.deleteKaryawan(karyawanBefore);
+            model.addAttribute("errorMessage", "ERROR! Sertifikasi Karyawan Tidak Boleh SAMA! ¯\\_(ツ)_/¯");
+            return "error";
+        }
     }
 
     @GetMapping(value = "/karyawan/{id}")
@@ -190,18 +194,18 @@ public class KaryawanController {
             @PathVariable(value = "id") Long id,
             Model model
     ){
+        List<SertifikasiKaryawanModel> sertifikasiKaryawanModelListByIdKaryawan = sertifikasiKaryawanService.getAllSertifikasikaryawanById(karyawan.getIdKaryawan());
+        for (SertifikasiKaryawanModel sertifikasiKaryawan : sertifikasiKaryawanModelListByIdKaryawan){
+            sertifikasiKaryawanService.deleteSertifikasiKaryawan(sertifikasiKaryawan.getId());
+        }
         if(karyawan.getSertifikatKaryawan() == null){
             karyawan.setSertifikatKaryawan(new ArrayList<>());
         } else {
             for (SertifikasiKaryawanModel sertifikasiKaryawan : karyawan.getSertifikatKaryawan()){
-                if(sertifikasiKaryawan.getB_karyawan() == null && sertifikasiKaryawan.getA_sertifikat() == null){
-                    sertifikasiKaryawan.setB_karyawan(karyawan);
-                    SertifikasiModel sertifikasi = sertifikasiService.getSertifikasiById(sertifikasiKaryawan.getId().getIdSertifikat());
-                    sertifikasiKaryawan.setA_sertifikat(sertifikasi);
-                    sertifikasiKaryawan.setD_noSertifikasi(generateId(sertifikasiKaryawan));
-                } else {
-                    sertifikasiKaryawanService.deleteSertifikasiKaryawan(sertifikasiKaryawan.getId());
-                }
+                sertifikasiKaryawan.setB_karyawan(karyawan);
+                SertifikasiModel sertifikasi = sertifikasiService.getSertifikasiById(sertifikasiKaryawan.getId().getIdSertifikat());
+                sertifikasiKaryawan.setA_sertifikat(sertifikasi);
+                sertifikasiKaryawan.setD_noSertifikasi(generateId(sertifikasiKaryawan));
             }
         }
         KaryawanModel updatedKaryawan = karyawanService.updateKaryawan(karyawan);
@@ -211,14 +215,109 @@ public class KaryawanController {
         return "update-karyawan";
     }
 
-    @PostMapping(value = "/karyawan/{id}", params = {"hapus"})
-    public String deleteKaryawan(
+    @PostMapping(value = "/karyawan/{id}/ubah", params = {"deleteRow"})
+    private String deleteRowUpdateSertifikat(
+            @ModelAttribute KaryawanModel karyawan,
+            @RequestParam("deleteRow") Integer row,
+            Model model
+    ){
+        final Integer rowId = Integer.valueOf(row);
+        karyawan.getSertifikatKaryawan().remove(rowId.intValue());
+
+        List<SertifikasiModel> listSertifikasi = sertifikasiService.getListSertifikasi();
+
+        model.addAttribute("karyawan", karyawan);
+        model.addAttribute("listSertifikasiExisting", listSertifikasi);
+
+        return "form-update-karyawan";
+    }
+
+    @PostMapping(value = "/karyawan/{id}/hapus", params = {"hapus"})
+    private String deleteKaryawan(
             @PathVariable(value = "id") Long id,
             Model model
     ){
         KaryawanModel karyawan = karyawanService.getKaryawanByIdKaryawan(id);
+
+        // null tugas agar tidak kehapus
+        for (PresensiModel presensi : karyawan.getListPresensi()){
+            for(TugasModel tugas : presensi.getListTugas()){
+                tugas.setPresensi(null);
+            }
+        }
+
         karyawanService.deleteKaryawan(karyawan);
         model.addAttribute("karyawan", karyawan);
         return "delete-karyawan";
     }
+
+    @GetMapping(value = "filter-sertifikasi")
+    private String filterKaryawanPage(
+            Model model
+    ){
+        List<SertifikasiModel> listSertifikasi = sertifikasiService.getListSertifikasi();
+        List<KaryawanModel> listKaryawan = new ArrayList<>();
+        model.addAttribute("listSertifikasi", listSertifikasi);
+        model.addAttribute("listKaryawan", listKaryawan);
+        return "filter-karyawan";
+    }
+
+    @PostMapping(value = "filter-sertifikasi")
+    private String searchKaryawan(
+            @RequestParam(value = "id-sertifikasi") Long idSertifikat,
+            Model model
+    ){
+        SertifikasiModel sertifikat = sertifikasiService.getSertifikasiById(idSertifikat);
+        List<SertifikasiKaryawanModel> listSertifikasiKaryawan = sertifikat.getSertifikatKaryawan();
+        List<KaryawanModel> listKaryawan = new ArrayList<>();
+        for (SertifikasiKaryawanModel sertifikasiKaryawan : listSertifikasiKaryawan){
+            listKaryawan.add(sertifikasiKaryawan.getB_karyawan());
+        }
+        List<SertifikasiModel> listSertifikasi = sertifikasiService.getListSertifikasi();
+        model.addAttribute("listSertifikasi", listSertifikasi);
+        model.addAttribute("listKaryawan", listKaryawan);
+        model.addAttribute("sertifikat", sertifikat);
+        return "filter-karyawan";
+    }
+
+    // INSENTIF
+    @GetMapping(value = "/karyawan/{id}/insentif")
+    private String insentifKaryawanPage(
+            @PathVariable(value = "id") Long idKaryawan,
+            Model model
+    ){
+        HashMap<String, Integer> daftarInsentif = new HashMap<>();
+        KaryawanModel karyawan = karyawanService.getKaryawanByIdKaryawan(idKaryawan);
+        int insentifSertifikat = karyawan.getSertifikatKaryawan().size() * 3000;
+
+        int insentifPresensi = 0;
+        int insentifTugas = 0;
+        List<PresensiModel> listPresensiKaryawan = karyawan.getListPresensi();
+        for (PresensiModel presensi : listPresensiKaryawan){
+            if(presensi.getStatus() == 0){
+                insentifPresensi -= 1000;
+            }
+
+            for(TugasModel tugas : presensi.getListTugas()){
+                if(tugas.getM_status().equals("2")){
+                    insentifTugas += (1000*tugas.getL_storyPoint());
+                }
+            }
+        }
+
+        long totalInsentif = insentifSertifikat + insentifPresensi + insentifTugas;
+        if (totalInsentif < 0)
+            totalInsentif = 0L;
+
+        daftarInsentif.put("Sertifikasi", insentifSertifikat);
+        daftarInsentif.put("Presensi", insentifPresensi);
+        daftarInsentif.put("Tugas", insentifTugas);
+
+        karyawan.setZa_insentif(totalInsentif);
+        karyawanService.addKaryawan(karyawan);
+        model.addAttribute("daftarInsentif", daftarInsentif);
+        model.addAttribute("karyawan", karyawan);
+        return "insentif";
+    }
+
 }

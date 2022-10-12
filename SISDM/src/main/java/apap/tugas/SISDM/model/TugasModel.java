@@ -22,30 +22,28 @@ import java.math.BigInteger;
 public class TugasModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NotNull
     private Long idTugas;
 
     @NotNull
     @Size(max = 255)
     @Column(name = "nama")
-    private String namaTugas;
+    private String j_namaTugas;
 
     @NotNull
     @Size(max = 255)
     @Column(name = "deskripsi")
-    private String deskripsiTugas;
+    private String k_deskripsiTugas;
 
     @NotNull
     @Column(name = "story_point")
-    private int storyPoint;
+    private int l_storyPoint;
 
     @NotNull
     @Size(max = 10)
     @Column(name = "status")
-    private String status;
+    private String m_status;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JoinColumn(name = "id_presensi", referencedColumnName = "idPresensi")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private PresensiModel presensi;
 }

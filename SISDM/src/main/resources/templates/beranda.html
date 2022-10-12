@@ -28,15 +28,15 @@
 <div class="container text-center">
   <a th:href="@{/karyawan}" class="btn btn-danger btn-lg mx-3">Karyawan</a>
   <a th:href="@{/presensi}" class="btn btn-danger btn-lg mx-3">Presensi</a>
-  <a th:href="@{/karyawan}" class="btn btn-danger btn-lg mx-3">Tambah Tugas</a>
+  <a th:href="@{/tambah-tugas}" class="btn btn-danger btn-lg mx-3">Tambah Tugas</a>
   <div class="btn-group">
     <button class="btn btn-danger btn-lg dropdown-toggle mx-3" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
      Filter
     </button>
     <div class="dropdown-menu">
-      <a class="dropdown-item" href="#">Cari tugas berdasarkan karyawan yang memiliki status tertentu</a>
+      <a class="dropdown-item" th:href="@{/filter-tugas}">Cari tugas berdasarkan karyawan yang memiliki status tertentu</a>
       <div class="dropdown-divider"></div>
-      <a class="dropdown-item" href="#">Cari karyawan berdasarkan sertifikat</a>
+      <a class="dropdown-item" th:href="@{/filter-sertifikasi}">Cari karyawan berdasarkan sertifikat</a>
     </div>
   </div>
 </div>

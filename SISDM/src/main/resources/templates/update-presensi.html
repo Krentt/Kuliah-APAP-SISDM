@@ -8,19 +8,20 @@
 </head>
 <body>
 <!--Bootstrap Navbar-->
-<nav th:replace="fragments/navbar :: navbar(${'karyawan'})"></nav>
+<nav th:replace="fragments/navbar :: navbar(${'presensi'})"></nav>
 <!--End of Navbar -->
 
 <!--Card Section-->
 <div class="row justify-content-center my-5">
   <div class="card my-auto">
-    <div class="card-body" th:object="${karyawan}">
-      <h2 th:text="'Data karyawan dengan nama ' + *{a_namaDepanKaryawan} + ' ' + *{b_namaBelakangKaryawan} + ' berasil diperbarui'"></h2>
+    <div class="card-body" th:object="${presensi}">
+      <h2 th:text="'Presensi tanggal ' + ${#temporals.format(presensi.tanggal, 'dd MMMM yyyy')} + ' atas nama ' + ${presensi.karyawan.a_namaDepanKaryawan} + ' ' + ${presensi.karyawan.b_namaBelakangKaryawan} + ' berhasil diperbarui'"></h2>
       <br>
-      <a class="btn btn-danger" th:href="@{/karyawan}">Kembali</a>
+      <a class="btn btn-danger" th:href="@{/presensi}">Kembali</a>
     </div>
   </div>
 </div>
+
 <!--Bootstrap script-->
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>

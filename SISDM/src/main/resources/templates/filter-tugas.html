@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+  <title>Sistem Informasi Sumber Daya Manusia</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <object th:include="fragments/navbar :: css" th:remove="tag"></object>
+  <object th:include="fragments/navbar :: js" th:remove="tag"></object>
+</head>
+<body>
+<!--Bootstrap Navbar-->
+<nav th:replace="fragments/navbar :: navbar(${''})"></nav>
+<!--End of Navbar -->
+
+<!--Title-->
+  <br>
+    <h1 class="text-center" style="font-family: 'Comic Sans MS'">Filter Tugas</h1>
+    <h5 class="text-center text-danger">Berdasarkan Nama Karyawan dan Status Tugas</h5>
+  <br>
+<!--End of Title-->
+
+<!--Filter-->
+  <div class="container w-25">
+    <form th:action="@{/filter-tugas}" method="POST" th:object="${tugas}">
+      <div class="form-group">
+        <label style="font-family: 'Arial'"><b>Nama Karyawan</b></label>
+        <select id="namaKaryawan" class="form-control" th:name="id-karyawan">
+          <option hidden >Nama Karyawan</option>
+          <option th:each="karyawan : ${listKaryawan}" th:value="${karyawan.idKaryawan}" th:text="${karyawan.a_namaDepanKaryawan} + ' ' + ${karyawan.b_namaBelakangKaryawan}"></option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label style="font-family: 'Arial'"><b>Status Tugas</b></label>
+        <select th:name="status" class="form-control" th:value="${status}">
+          <option hidden >Status Tugas</option>
+          <option th:value="0">Dimulai</option>
+          <option th:value="1">Dikerjakan</option>
+          <option th:value="2">Selesai</option>
+        </select>
+      </div>
+      <br>
+      <div class="d-flex justify-content-center">
+        <button  type="submit" class="btn btn-danger w-25">Cari</button>
+      </div>
+    </form>
+  </div>
+<!--End Of Filter-->
+
+<!--Table Tugas-->
+<div class="container w-75 my-5">
+  <div class="card shadow-sm" >
+    <div class="card-header" style="background-color: #36c5f1">
+      <ul class="list-inline my-auto">
+        <li class="list-inline-item py-2">
+          <h5 th:if="${karyawan} == null" class="text-white">Daftar Tugas</h5>
+          <h5 th:unless="${karyawan} == null" class="text-white" th:text="'Daftar Tugas ' + ${karyawan.a_namaDepanKaryawan} + ' ' + ${karyawan.b_namaBelakangKaryawan}"></h5>
+        </li>
+        <li class="list-inline-item py-2 float-right">
+          <div th:switch="${statusTugas}">
+            <h5 th:case="0" class="text-white">Status <span class="text-danger"><b>Dimulai</b></span></h5>
+            <h5 th:case="1" class="text-white">Status <span class="text-warning"><b>Dikerjakan</b></span></h5>
+            <h5 th:case="2" class="text-white">Status <span class="text-success"><b>Selesai</b></span></h5>
+
+
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="card-body">
+      <div th:if="${listTugas.size()} == 0">
+        <h5 class="text-center text-danger card-body shadow-sm border border-danger"><b>Tidak Ada Tugas</b></h5>
+      </div>
+      <div th:unless="${listTugas.size()} == 0">
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th class="text-center" style="color: #36c5f1">No</th>
+            <th class="text-center" style="color: #36c5f1">Nama Tugas</th>
+            <th class="text-center" style="color: #36c5f1">Story Point</th>
+            <th class="text-center" style="color: #36c5f1">Deskripsi</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="tugas, iterationStatus: ${listTugas}">
+            <td th:text="${iterationStatus.count}" class="text-center"></td>
+            <td th:text="${tugas.j_namaTugas}" class="text-center"></td>
+            <td th:text="${tugas.l_storyPoint}" class="text-center"></td>
+            <td th:text="${tugas.k_deskripsiTugas}" class="text-center"></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<!--End of Table Tugas-->
+
+<!--Bootstrap script-->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<!--End of script-->
+</body>
+</html>

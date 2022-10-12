@@ -51,6 +51,9 @@ public class KaryawanModel {
     @Column(name = "email", nullable = false)
     private String z_emailKaryawan;
 
+    @Column(name="insentif")
+    private Long za_insentif;
+
     @OneToMany(mappedBy = "b_karyawan", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private List<SertifikasiKaryawanModel> sertifikatKaryawan;
 

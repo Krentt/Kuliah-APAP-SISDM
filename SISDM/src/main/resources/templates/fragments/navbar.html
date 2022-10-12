@@ -31,16 +31,16 @@
                 <a class="nav-link" th:href="@{/presensi}" th:classappend="${var} == 'presensi' ? 'active'">Presensi</a>
             </li>
             <li class="nav-item px-4">
-                <a class="nav-link" th:href="@{/}" th:classappend="${var} == 'tugas' ? 'active'">Tambah Tugas</a>
+                <a class="nav-link" th:href="@{/tambah-tugas}" th:classappend="${var} == 'tugas' ? 'active'">Tambah Tugas</a>
             </li>
             <li class="nav-item px-4 dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Filter
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#">Cari tugas berdasarkan karyawan yang memiliki status tertentu</a>
+                    <a class="dropdown-item" th:href="@{/filter-tugas}">Cari tugas berdasarkan karyawan yang memiliki status tertentu</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Cari karyawan berdasarkan sertifikat</a>
+                    <a class="dropdown-item" th:href="@{/filter-sertifikasi}">Cari karyawan berdasarkan sertifikat</a>
                 </div>
             </li>
         </ul>

@@ -14,6 +14,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Date;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -27,13 +28,11 @@ import java.util.List;
 public class PresensiModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NotNull
     private Long idPresensi;
 
     @NotNull
-    @Size(max = 255)
     @Column(name = "status")
-    private String status;
+    private int status;
 
     @NotNull
     @Column()
@@ -42,19 +41,19 @@ public class PresensiModel {
 
     @Nullable
     @Column(name = "waktu_masuk")
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-    private LocalDateTime u_waktuMasuk;
+    @DateTimeFormat(pattern = "HH:mm")
+    private LocalTime u_waktuMasuk;
 
     @Nullable
     @Column(name = "waktu_keluar")
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-    private LocalDateTime v_waktuKeluar;
+    @DateTimeFormat(pattern = "HH:mm")
+    private LocalTime v_waktuKeluar;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "id_karyawan", referencedColumnName = "idKaryawan", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private KaryawanModel karyawan;
 
-    @OneToMany(mappedBy = "presensi", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "presensi", fetch = FetchType.LAZY)
     private List<TugasModel> listTugas;
 }
